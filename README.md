@@ -1,6 +1,6 @@
 Integración con Mercado Pago — React + Java
 
-Este proyecto permite implementar pagos online utilizando el SDK oficial de **Mercado Pago**, tanto del lado del cliente (frontend con React) como del servidor (backend en Java). Ideal para plataformas de servicios, comercio electrónico o sistemas que necesiten cobrar o recibir transferencias.
+Esta falopeada permite implementar pagos online utilizando el SDK oficial de **Mercado Pago**, tanto del lado del cliente (frontend con React) como del servidor (backend en Java) Y ta gueno para recibir transferencias.
 
 ---
 
@@ -27,18 +27,47 @@ cd frontend
 # Instalar SDK Mercado Pago
 npm install @mercadopago/sdk-react
 Inicializar SDK
-En tu App.tsx o archivo principal:
 
-tsx
-Copiar
-Editar
+En la App.tsx o archivo principal:
+
+
 import { initMercadoPago } from '@mercadopago/sdk-react';
 
-initMercadoPago('TU_PUBLIC_KEY'); // obtené desde el panel de Mercado Pago
+initMercadoPago('TU_PUBLIC_KEY'); // se obtiene desde el panel de Mercado Pago
 Usar el botón de pago
-tsx
-Copiar
-Editar
+
 import { Wallet } from '@mercadopago/sdk-react';
 
 <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} />
+
+
+## Backend (Java + Spring Boot)
+```bash
+Agregá la dependencia en tu pom.xml:
+
+
+<dependency>
+  <groupId>com.mercadopago</groupId>
+  <artifactId>dx-java</artifactId>
+  <version>2.1.10</version>
+</dependency>
+Crear una preferencia de pago
+java
+Copiar
+Editar
+@PostMapping("/create_preference")
+public ResponseEntity<?> createPreference() {
+    MercadoPago.SDK.setAccessToken("ACCESS_TOKEN");
+
+    Preference preference = new Preference();
+
+    Item item = new Item()
+        .setTitle("Producto o Servicio")
+        .setQuantity(1)
+        .setUnitPrice((float) 1500.00);
+
+    preference.appendItem(item);
+    preference.save();
+
+    return ResponseEntity.ok(Map.of("preferenceId", preference.getId()));
+}
