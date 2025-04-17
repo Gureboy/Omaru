@@ -26,13 +26,19 @@ cd frontend
 
 # Instalar SDK Mercado Pago
 npm install @mercadopago/sdk-react
-
-
-
 Inicializar SDK
 En tu App.tsx o archivo principal:
 
-
+tsx
+Copiar
+Editar
 import { initMercadoPago } from '@mercadopago/sdk-react';
 
 initMercadoPago('TU_PUBLIC_KEY'); // obtené desde el panel de Mercado Pago
+Usar el botón de pago
+tsx
+Copiar
+Editar
+import { Wallet } from '@mercadopago/sdk-react';
+
+<Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} />
