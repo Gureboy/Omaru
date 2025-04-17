@@ -19,11 +19,20 @@ Este proyecto permite implementar pagos online utilizando el SDK oficial de **Me
 ### 🖥️ Frontend (React)
 
 ```bash
-# Crear proyecto si no existe
+{# Crear proyecto si no existe
 npx create-react-app frontend --template typescript
 
 cd frontend
 
 # Instalar SDK Mercado Pago
-npm install @mercadopago/sdk-react
+npm install @mercadopago/sdk-react}
+}
 
+
+Inicializar SDK
+En tu App.tsx o archivo principal:
+
+
+import { initMercadoPago } from '@mercadopago/sdk-react';
+
+initMercadoPago('TU_PUBLIC_KEY'); // obtené desde el panel de Mercado Pago
