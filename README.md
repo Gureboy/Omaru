@@ -4,7 +4,7 @@ Esta falopeada permite implementar pagos online utilizando el SDK oficial de **M
 
 ---
 
-## 📦 Tecnologías utilizadas
+## Tecnologías utilizadas
 
 | Parte        | Tecnología              |
 |--------------|--------------------------|
@@ -14,9 +14,9 @@ Esta falopeada permite implementar pagos online utilizando el SDK oficial de **M
 
 ---
 
-## 🚀 Instalación rápida
+## Instalación rápida
 
-### 🖥️ Frontend (React)
+###  Frontend (React) y  Backend (Java + Spring Boot)
 
 ```bash
 // # Crear proyecto si no existe
@@ -41,8 +41,8 @@ import { Wallet } from '@mercadopago/sdk-react';
 <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} />
 
 //
-## Backend (Java + Spring Boot)
-```bash
+##
+
 Agregá la dependencia en tu pom.xml:
 
 
@@ -60,7 +60,7 @@ public ResponseEntity<?> createPreference() {
     Preference preference = new Preference();
 
     Item item = new Item()
-        .setTitle("Producto o Servicio")
+        .setTitle("Merch de La Orden")
         .setQuantity(1)
         .setUnitPrice((float) 1500.00);
 
