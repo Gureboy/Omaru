@@ -19,7 +19,7 @@ Esta falopeada permite implementar pagos online utilizando el SDK oficial de **M
 ### 🖥️ Frontend (React)
 
 ```bash
-# Crear proyecto si no existe
+// # Crear proyecto si no existe
 npx create-react-app frontend --template typescript
 
 cd frontend
@@ -40,7 +40,7 @@ import { Wallet } from '@mercadopago/sdk-react';
 
 <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} />
 
-
+//
 ## Backend (Java + Spring Boot)
 ```bash
 Agregá la dependencia en tu pom.xml:
@@ -51,10 +51,8 @@ Agregá la dependencia en tu pom.xml:
   <artifactId>dx-java</artifactId>
   <version>2.1.10</version>
 </dependency>
-Crear una preferencia de pago
-java
-Copiar
-Editar
+Crea una preferencia de pago
+
 @PostMapping("/create_preference")
 public ResponseEntity<?> createPreference() {
     MercadoPago.SDK.setAccessToken("ACCESS_TOKEN");
