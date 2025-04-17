@@ -1,43 +1,61 @@
-# Omaru
-Solo para prueba falopa
-Implementar una solución completa de pagos y cobros utilizando el SDK oficial de Mercado Pago, permitiendo generar transferencias, recibir pagos, y gestionar preferencias desde una aplicación web moderna.
+# 💳 Integración con Mercado Pago — React + Java
 
-🛠️ Stack recomendado
-Frontend (Cliente):
-✅ React — recomendado oficialmente por Mercado Pago
-🟨 También compatibles: Vue.js, Angular (pero requieren wrappers personalizados o adaptadores)
-❌ No se recomienda mezclar frameworks en un mismo proyecto, salvo en microfrontends muy avanzados.
+Este proyecto permite implementar pagos online utilizando el SDK oficial de **Mercado Pago**, tanto del lado del cliente (frontend con React) como del servidor (backend en Java). Ideal para plataformas de servicios, comercio electrónico o sistemas que necesiten cobrar o recibir transferencias.
 
-Backend (Servidor):
-✅ Java (Spring Boot) — completamente compatible y robusto
-🟩 También posibles: Node.js, Python, PHP, etc.
-⚠️ Mercado Pago provee SDKs oficiales para backend en Java: mercadopago Java SDK
+---
 
-📦 Instalación del SDK (Cliente)
+## 📦 Tecnologías utilizadas
 
+| Parte        | Tecnología              |
+|--------------|--------------------------|
+| Frontend     | React + SDK MercadoPago |
+| Backend      | Java (Spring Boot)      |
+| API Pagos    | Mercado Pago REST API   |
+
+---
+
+## 🚀 Instalación rápida
+
+### 🖥️ Frontend (React)
+
+```bash
+# Crear proyecto si no existe
+npx create-react-app frontend --template typescript
+
+cd frontend
+
+# Instalar SDK Mercado Pago
 npm install @mercadopago/sdk-react
-🧠 Inicialización del SDK en React
+Inicializar SDK
+En tu App.tsx o archivo principal:
 
-// src/App.tsx o App.jsx
+tsx
+Copiar
+Editar
 import { initMercadoPago } from '@mercadopago/sdk-react';
 
-initMercadoPago('TU_PUBLIC_KEY'); 
-💳 Integración del Botón de Pago
-
-
+initMercadoPago('TU_PUBLIC_KEY'); // obtené desde el panel de Mercado Pago
+Usar el botón de pago
+tsx
+Copiar
+Editar
 import { Wallet } from '@mercadopago/sdk-react';
 
 <Wallet initialization={{ preferenceId: '<PREFERENCE_ID>' }} />
-⚠️ El preferenceId se obtiene desde el backend al crear una preferencia de pago (ver más abajo).
-
-🖥️ Backend en Java (Spring Boot) — Crear una Preferencia
+🔧 Backend (Java + Spring Boot)
+xml
+Copiar
+Editar
+<!-- pom.xml -->
+<dependency>
+  <groupId>com.mercadopago</groupId>
+  <artifactId>dx-java</artifactId>
+  <version>2.1.10</version>
+</dependency>
+Crear una preferencia de pago
 java
-
-import com.mercadopago.MercadoPago;
-import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.Preference;
-import com.mercadopago.resources.datastructures.preference.*;
-
+Copiar
+Editar
 @PostMapping("/create_preference")
 public ResponseEntity<?> createPreference() {
     MercadoPago.SDK.setAccessToken("ACCESS_TOKEN");
@@ -45,61 +63,59 @@ public ResponseEntity<?> createPreference() {
     Preference preference = new Preference();
 
     Item item = new Item()
-        .setTitle("Servicio/Producto")
+        .setTitle("Producto o Servicio")
         .setQuantity(1)
         .setUnitPrice((float) 1500.00);
 
     preference.appendItem(item);
+    preference.save();
 
-    try {
-        preference.save();
-        return ResponseEntity.ok(Map.of("preferenceId", preference.getId()));
-    } catch (MPException e) {
-        return ResponseEntity.status(500).body("Error: " + e.getMessage());
-    }
+    return ResponseEntity.ok(Map.of("preferenceId", preference.getId()));
 }
-🔐 Credenciales
-Public Key: usada en el frontend
+🔐 Credenciales necesarias
+Obtené tus claves desde el Panel de Desarrolladores de Mercado Pago:
 
-Access Token: usada en el backend
+Public Key → uso en el frontend
 
-Las obtenés desde Mercado Pago Developers > Credenciales
+Access Token → uso en el backend
 
-✅ Flujo resumido de integración
+📡 Webhooks (opcional pero recomendado)
+Mercado Pago puede enviarte notificaciones automáticas cuando se completa un pago.
 
-graph TD;
-  A[Usuario en React] -->|Click en botón| B[Componente Wallet]
-  B -->|Usa preferenceId| C[Renderiza botón de pago]
-  C -->|Hace pago| D[Mercado Pago]
-  D -->|Notifica| E[Backend Java con Webhook]
-  E -->|Guarda datos| F[Base de datos o dashboard]
-📡 Webhooks para notificaciones de pago
-Mercado Pago puede enviarte una notificación automática cuando se realiza un pago. Debes configurar una URL pública en:
+Configuración
+Ingresá a: Configuración Webhooks
 
-Configuración de Webhooks
+Agregá tu URL pública: https://tu-dominio.com/webhook
 
-
-
-
+Controlador de ejemplo en Java
+java
+Copiar
+Editar
 @PostMapping("/webhook")
-public ResponseEntity<?> receiveWebhook(@RequestBody String payload) {
-    // Procesar evento
-    System.out.println("Pago recibido: " + payload);
+public ResponseEntity<?> recibirWebhook(@RequestBody String payload) {
+    System.out.println("Evento recibido: " + payload);
     return ResponseEntity.ok().build();
 }
-📂 Estructura recomendada del proyecto
+🗂️ Estructura del proyecto sugerida
+bash
+Copiar
+Editar
+mercadopago-integration/
+├── frontend/                # App React con SDK Mercado Pago
+│   └── src/
+│       └── components/
+│           └── PaymentButton.tsx
+├── backend/                 # Spring Boot con controlador de pagos
+│   └── src/main/java/com/tuproject/
+│       └── controller/
+│           ├── PaymentController.java
+│           └── WebhookController.java
+└── README.md
+💡 Recomendaciones
+Usar entornos .env o application.properties para proteger credenciales
 
-/mercadopago-react-app
-│
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   └── components/
-│   │       └── PaymentButton.jsx
-│   └── package.json
-│
-└── backend/
-    ├── src/main/java/com/tuproject/
-    │   ├── controller/PaymentController.java
-    │   └── config/WebhookController.java
-    └── pom.xml
+Crear una base de datos para registrar pagos, usuarios, etc.
+
+Asegurar la comunicación HTTPS en producción
+
+
